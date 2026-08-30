@@ -6,7 +6,7 @@
   "scripts": {
     "sync": "node scripts/sync.js",
     "sync:init": "node scripts/sync.js --init",
-    "export-diagrams": "bash scripts/export-diagrams.sh"
+    "export-diagrams": "node scripts/export-diagrams.js"
   },
   "keywords": [
     "lark-docs",

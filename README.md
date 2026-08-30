@@ -23,7 +23,7 @@ This repository is built with the **Antigravity Kit** structure in `.agents/`. A
 | Skill Name | Path | Description & Agent Capability |
 | :--- | :--- | :--- |
 | **`lark-docs`** | [`.agents/skills/lark-docs/SKILL.md`](./.agents/skills/lark-docs/SKILL.md) | Complete lookup reference for Lark CLI (`@larksuite/cli`) commands across 7 categories, and automated sync script usage (`scripts/sync.js`, `doc-mapping.json`). |
-| **`drawio-diagrams`** | [`.agents/skills/drawio-diagrams/SKILL.md`](./.agents/skills/drawio-diagrams/SKILL.md) | Step-by-step guide for generating architecture/ERD/flow diagrams via Draw.io MCP, exporting SVG/PNG Retina 2x via `drawio-cli`, and embedding interactive edit links. |
+| **`drawio-diagrams`** | [`.agents/skills/drawio-diagrams/SKILL.md`](./.agents/skills/drawio-diagrams/SKILL.md) | Step-by-step guide for generating architecture/ERD/flow diagrams via Draw.io MCP, exporting SVG/PNG Retina 2x via `scripts/export-diagrams.js`, and embedding interactive edit links. |
 
 ### 💬 Sample Prompts for AI Agents
 
@@ -62,9 +62,9 @@ lark-docs-kit/
 │   ├── 08-project-roadmap.md     # Project Roadmap & Management
 │   ├── doc-mapping.json          # Centralized Lark Document ID mapping
 │   └── diagrams/                 # Draw.io source files (.drawio, .drawio.svg, .png)
-├── scripts/                      # Automation Scripts
+├── scripts/                      # Automation Scripts (100% Node.js)
 │   ├── sync.js                   # Node.js sync engine for Lark Docs
-│   └── export-diagrams.sh        # Bash script for batch Draw.io diagram export
+│   └── export-diagrams.js        # Node.js export engine for Draw.io diagrams
 ├── AGENTS.md                     # Agent workspace guidance
 └── README.md                     # Project sitemap & guide
 ```
@@ -101,6 +101,7 @@ node scripts/sync.js --doc 01-prd
 2. Batch export all diagrams to SVG and PNG Retina 2x:
 ```bash
 npm run export-diagrams
+# Or: node scripts/export-diagrams.js
 ```
 3. Embedded format in Markdown:
 ```markdown
