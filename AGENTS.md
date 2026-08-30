@@ -6,9 +6,14 @@ Guidance and instructions for Antigravity AI Agents working with Lark Docs Kit.
 
 - Primary workflow rule: `./.agents/rules/primary-workflow.md`
 - Documentation management rule: `./.agents/rules/documentation-management.md`
+- Development rules: `./.agents/rules/development-rules.md`
 - Sync workflow: `./.agents/workflows/sync-docs.md`
 - Diagram creation workflow: `./.agents/workflows/draw-diagram.md`
+- MCP tool execution workflow: `./.agents/workflows/use-mcp.md`
 - Lark Docs skill: `./.agents/skills/lark-docs/SKILL.md`
+- Draw.io Diagrams skill: `./.agents/skills/drawio-diagrams/SKILL.md`
+- Aesthetic UI/Diagram skill: `./.agents/skills/aesthetic/SKILL.md`
+
 
 ## Documentation & Diagram Architecture
 

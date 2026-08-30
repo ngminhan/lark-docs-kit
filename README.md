@@ -71,6 +71,49 @@ lark-docs-kit/
 
 ---
 
+## 🛠️ Prerequisites & Setup (For New Users)
+
+If you are setting up `Lark Docs Kit` for the first time, follow these step-by-step setup instructions:
+
+### 1. System Requirements & Node.js Dependencies
+- **Node.js**: `v18.0.0` or higher
+- Install project dependencies:
+  ```bash
+  npm install
+  ```
+
+### 2. Install & Authenticate Lark CLI (`@larksuite/cli`)
+Install the official Lark CLI globally and authenticate with your Lark / Feishu account:
+
+```bash
+# 1. Install Lark CLI globally
+npm install -g @larksuite/cli
+
+# 2. Log in to your Lark/Feishu account
+lark-cli auth login
+```
+> 💡 **OAuth Scope Approvals & Device Code Login**:
+> When creating folders or moving files that require new OAuth permissions (`docx:document:create`, `space:document:move`, `drive:drive`), Lark CLI will initiate a **Device Code Login**.
+> The agent or CLI will present a verification URL and generate a QR code image (`docs/diagrams/lark-qr.png`). Simply click **Confirm** in your browser/app, then complete authentication using:
+> `npx lark-cli auth login --device-code <DEVICE_CODE>`
+
+### 3. Set Up Draw.io MCP Server (For AI Agents)
+To enable AI Agents to draw system architecture diagrams, add the `drawio` MCP server to your IDE or Agent configuration (e.g. `~/.gemini/antigravity-ide/mcp_config.json` or `.agents/mcp_config.json`):
+
+```json
+{
+  "mcpServers": {
+    "drawio": {
+      "command": "npx",
+      "args": ["-y", "@drawio/mcp-server"]
+    }
+  }
+}
+```
+*Note: Diagram export from `.drawio` to SVG and PNG Retina 2x is handled automatically via `npm run export-diagrams` using `drawio-cli` (no manual Puppeteer setup required).*
+
+---
+
 ## 🚀 Quick Start Guide
 
 ### 1. Initialize a New Project on Lark Drive
@@ -80,6 +123,7 @@ Create a parent folder on Lark Drive for your project, copy its `FOLDER_TOKEN` (
 node scripts/sync.js --init <FOLDER_TOKEN>
 ```
 *This automatically creates all 8 documents inside your Lark folder, extracts their Document IDs, and saves them to `docs/doc-mapping.json` & Markdown headers.*
+
 
 ---
 

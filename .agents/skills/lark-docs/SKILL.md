@@ -76,7 +76,8 @@ Agents operating in this repo MUST prioritize using the automated scripts and JS
    ```bash
    # Batch compile all .drawio files to SVG and PNG Retina 2x
    npm run export-diagrams
-   # Or: bash scripts/export-diagrams.sh
+   # Or: node scripts/export-diagrams.js
+
    ```
 
 ---

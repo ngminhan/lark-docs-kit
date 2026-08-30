@@ -36,8 +36,9 @@ Run the automated script to compile all `.drawio` files to SVG and PNG Retina 2x
 
 ```bash
 npm run export-diagrams
-# Or: bash scripts/export-diagrams.sh
+# Or: node scripts/export-diagrams.js
 ```
+
 
 ### Alternative: Single File Export via `drawio-cli`
 ```bash

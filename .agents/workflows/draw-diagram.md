@@ -22,7 +22,8 @@ Run the batch export script or `drawio-cli` commands:
 ```bash
 # Recommended: Batch export all diagrams to SVG & PNG Retina 2x
 npm run export-diagrams
-# Or: bash scripts/export-diagrams.sh
+# Or: node scripts/export-diagrams.js
+
 
 # Single file export via drawio-cli:
 npx -y drawio-cli -x -f svg -o docs/diagrams/<name>.drawio.svg docs/diagrams/<name>.drawio

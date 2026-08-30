@@ -55,7 +55,8 @@ Status: Draft | In Review | Approved
 
 ### RULE 3.2: Immediate Auto Export & Sync Protocol
 - **IMMEDIATE AUTO SYNC MANDATE**: Immediately after creating or modifying any `.drawio` diagram, you MUST execute diagram export and sync to Lark Docs without delay:
-  1. Compile SVG & PNG Retina 2x: `npm run export-diagrams` (or `bash scripts/export-diagrams.sh`)
+  1. Compile SVG & PNG Retina 2x: `npm run export-diagrams` (or `node scripts/export-diagrams.js`)
+
   2. Sync documentation & embed visual images in-place: `npm run sync` (or `node scripts/sync.js`)
 
 ### RULE 3.3: CLI Export Engine
