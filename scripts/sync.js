@@ -30,18 +30,40 @@ const mapping = JSON.parse(fs.readFileSync(MAPPING_FILE, 'utf8'));
 
 const args = process.argv.slice(2);
 const isInit = args.includes('--init');
-const folderTokenIdx = args.indexOf('--init') + 1;
-const folderToken = isInit ? args[folderTokenIdx] : null;
+let folderTokenIdx = args.indexOf('--init') + 1;
+let folderToken = isInit && folderTokenIdx < args.length && !args[folderTokenIdx].startsWith('--') ? args[folderTokenIdx] : null;
 
-if (isInit && (!folderToken || folderToken.startsWith('--'))) {
-  console.error('❌ Vui lòng cung cấp FOLDER_TOKEN. Ví dụ: node scripts/sync.js --init fldcnXXXXXXXXX');
-  process.exit(1);
+// Nếu là --init nhưng không cung cấp folderToken -> Tự động tạo Folder mới trên Lark Drive!
+if (isInit && !folderToken) {
+  console.log('📁 Không thấy FOLDER_TOKEN được cung cấp. Đang tự động tạo Thư mục mới trên Lark Drive...');
+  try {
+    const createFolderCmd = `npx lark-cli drive +create-folder --name "Project Documentation"`;
+    const folderOutput = execSync(createFolderCmd, { encoding: 'utf8' });
+    let createdToken = null;
+    try {
+      const jsonRes = JSON.parse(folderOutput);
+      createdToken = jsonRes?.data?.token || jsonRes?.data?.folder_token;
+    } catch (e) {}
+    if (!createdToken) {
+      const match = folderOutput.match(/("token"|"folder_token"|token:)\s*:\s*"([^"]+)"/) || folderOutput.match(/fldcn[a-zA-Z0-9]+/);
+      if (match) createdToken = match[2] || match[1] || match[0];
+    }
+    if (createdToken) {
+      folderToken = createdToken;
+      console.log(`✅ Đã tự động tạo Thư mục trên Lark Drive! Folder Token: ${folderToken}\n`);
+    } else {
+      console.log(`⚠️ Không tự động bóc tách được Folder Token. Sẽ tạo bài viết ở 'My Library'.\n`);
+    }
+  } catch (err) {
+    console.warn(`⚠️ Không thể tự động tạo Thư mục (${err.message}). Sẽ tạo bài viết ở 'My Library'.\n`);
+  }
 }
 
 const docArgIdx = args.indexOf('--doc') + 1;
 const targetDocKey = args.includes('--doc') ? args[docArgIdx] : null;
 
 console.log('🚀 Bắt đầu tiến trình đồng bộ Lark Docs...\n');
+
 
 let updatedMapping = false;
 

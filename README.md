@@ -1,104 +1,35 @@
 # 📚 Lark Docs Kit
 
-> System for managing technical documentation in Markdown format, drawing architecture diagrams via Draw.io MCP, and automatically synchronizing with Lark Docs via Lark CLI (`@larksuite/cli`).
+> Agent-First Documentation & Diagram Automation System. Manages technical documentation in Markdown format, draws architecture diagrams via Draw.io MCP, and automatically synchronizes with Lark Docs via Lark CLI (`@larksuite/cli`).
 
 ---
 
-## 🌟 Overview & Key Features
+## 🤖 Agent-First Operating Paradigm
 
-- **Standard 8-Document Architecture**: Pre-defined structure (`01-prd.md` to `08-project-roadmap.md`) covering business requirements, architecture, database ERD, API specs, code standards, UI/UX design, testing/CI-CD, and project roadmap.
-- **Draw.io MCP Diagram Protocol**: Automatically draw system architecture, ERDs, sequence, and component diagrams strictly grounded in codebase & docs.
-- **Automated CLI Export**: Export `.drawio` files to `.drawio.svg` (for Git repo) and **PNG Retina 2x** (for crisp rendering on Lark Docs).
-- **Zero-Duplication Overwrite Sync**: Strict sync rules using `docs +update --command overwrite` to ensure documents are updated in place without creating duplicate files on Lark Drive.
-- **Auto Mapping & Init**: Single-command initialization for new projects (`node scripts/sync.js --init <FOLDER_TOKEN>`) and one-command batch sync (`npm run sync`).
+**You don't need to learn or run complex CLI commands.** 
+
+`Lark Docs Kit` is powered by the **Antigravity Kit** agent framework in `.agents/`. All operations—creating documents, drawing aesthetic diagrams, compiling high-res assets, and synchronizing with Lark Drive—are handled **autonomously by your AI Coding Agent** (Google Antigravity, Gemini IDE, Claude Code) through natural language prompts.
 
 ---
 
-## 🤖 AI Agent Integration & Skills Usage
+## 🛠️ One-Time Environment Setup
 
-This repository is built with the **Antigravity Kit** structure in `.agents/`. AI Coding Agents (such as Google Antigravity, Gemini, and Claude) automatically discover and activate specialized domain skills when executing tasks:
+Before issuing prompts to your AI Agent, complete these one-time environment setup steps:
 
-### 🧩 Available Agent Skills
-
-| Skill Name | Path | Description & Agent Capability |
-| :--- | :--- | :--- |
-| **`lark-docs`** | [`.agents/skills/lark-docs/SKILL.md`](./.agents/skills/lark-docs/SKILL.md) | Complete lookup reference for Lark CLI (`@larksuite/cli`) commands across 7 categories, and automated sync script usage (`scripts/sync.js`, `doc-mapping.json`). |
-| **`drawio-diagrams`** | [`.agents/skills/drawio-diagrams/SKILL.md`](./.agents/skills/drawio-diagrams/SKILL.md) | Step-by-step guide for generating architecture/ERD/flow diagrams via Draw.io MCP, exporting SVG/PNG Retina 2x via `scripts/export-diagrams.js`, and embedding interactive edit links. |
-
-### 💬 Sample Prompts for AI Agents
-
-- **Create System Architecture Diagram**:
-  > *"Agent, generate the System Container diagram using Draw.io MCP, export PNG Retina 2x, and update `docs/02-system-architecture.md`."*
-- **Initialize a New Project on Lark**:
-  > *"Agent, initialize all 8 project docs into Lark Drive folder token `fldcnXXXXXXXXX` and save the mapping."*
-- **Update Documentation & Sync**:
-  > *"Agent, update the API reference in `docs/04-codebase-api-reference.md` and sync changes to Lark Docs."*
-
----
-
-## 📂 Repository Structure
-
-```
-lark-docs-kit/
-├── .agents/                      # Antigravity Kit AI Agent Configuration
-│   ├── rules/                    # Documentation management & execution rules
-│   │   ├── documentation-management.md
-│   │   ├── development-rules.md
-│   │   └── primary-workflow.md
-│   ├── skills/                   # Domain Skills for AI Agents
-│   │   ├── lark-docs/SKILL.md    # Lark CLI & Sync skill
-│   │   └── drawio-diagrams/SKILL.md # Draw.io MCP & diagram export skill
-│   └── workflows/                # Executable Agent Workflows
-│       ├── sync-docs.md          # Doc synchronization workflow
-│       └── draw-diagram.md       # Diagram creation & export workflow
-├── docs/                         # Technical Documentation Source (Markdown)
-│   ├── 01-prd.md                 # Product Requirements Document — PRD
-│   ├── 02-system-architecture.md # System Architecture & Design
-│   ├── 03-database-design.md     # Database & Data Design
-│   ├── 04-codebase-api-reference.md # Codebase & API Reference
-│   ├── 05-development-standards.md # Development & Code Standards
-│   ├── 06-ui-ux-design-system.md # UI/UX & Design System
-│   ├── 07-testing-deployment.md # Testing & Deployment
-│   ├── 08-project-roadmap.md     # Project Roadmap & Management
-│   ├── doc-mapping.json          # Centralized Lark Document ID mapping
-│   └── diagrams/                 # Draw.io source files (.drawio, .drawio.svg, .png)
-├── scripts/                      # Automation Scripts (100% Node.js)
-│   ├── sync.js                   # Node.js sync engine for Lark Docs
-│   └── export-diagrams.js        # Node.js export engine for Draw.io diagrams
-├── AGENTS.md                     # Agent workspace guidance
-└── README.md                     # Project sitemap & guide
-```
-
----
-
-## 🛠️ Prerequisites & Setup (For New Users)
-
-If you are setting up `Lark Docs Kit` for the first time, follow these step-by-step setup instructions:
-
-### 1. System Requirements & Node.js Dependencies
-- **Node.js**: `v18.0.0` or higher
-- Install project dependencies:
-  ```bash
-  npm install
-  ```
-
-### 2. Install & Authenticate Lark CLI (`@larksuite/cli`)
-Install the official Lark CLI globally and authenticate with your Lark / Feishu account:
-
+### 1. Install Dependencies
 ```bash
-# 1. Install Lark CLI globally
-npm install -g @larksuite/cli
+npm install
+```
 
-# 2. Log in to your Lark/Feishu account
+### 2. Authenticate Lark CLI
+Install Lark CLI globally and log in to your Lark / Feishu account:
+```bash
+npm install -g @larksuite/cli
 lark-cli auth login
 ```
-> 💡 **OAuth Scope Approvals & Device Code Login**:
-> When creating folders or moving files that require new OAuth permissions (`docx:document:create`, `space:document:move`, `drive:drive`), Lark CLI will initiate a **Device Code Login**.
-> The agent or CLI will present a verification URL and generate a QR code image (`docs/diagrams/lark-qr.png`). Simply click **Confirm** in your browser/app, then complete authentication using:
-> `npx lark-cli auth login --device-code <DEVICE_CODE>`
 
-### 3. Set Up Draw.io MCP Server (For AI Agents)
-To enable AI Agents to draw system architecture diagrams, add the `drawio` MCP server to your IDE or Agent configuration (e.g. `~/.gemini/antigravity-ide/mcp_config.json` or `.agents/mcp_config.json`):
+### 3. Register Draw.io MCP Server (For AI Agents)
+Add the `drawio` MCP server to your IDE or Agent configuration (e.g. `~/.gemini/antigravity-ide/mcp_config.json` or `.agents/mcp_config.json`):
 
 ```json
 {
@@ -110,58 +41,68 @@ To enable AI Agents to draw system architecture diagrams, add the `drawio` MCP s
   }
 }
 ```
-*Note: Diagram export from `.drawio` to SVG and PNG Retina 2x is handled automatically via `npm run export-diagrams` using `drawio-cli` (no manual Puppeteer setup required).*
 
 ---
 
-## 🚀 Quick Start Guide
+## 💬 How to Interact with Your AI Agent (Sample Prompts)
 
-### 1. Initialize a New Project on Lark Drive
-Create a parent folder on Lark Drive for your project, copy its `FOLDER_TOKEN` (e.g. `fldcnXXXXXXXXX`), and run:
+Just give natural language instructions to your AI Agent in chat:
 
-```bash
-node scripts/sync.js --init <FOLDER_TOKEN>
-```
-*This automatically creates all 8 documents inside your Lark folder, extracts their Document IDs, and saves them to `docs/doc-mapping.json` & Markdown headers.*
+### 🚀 Initialize a New Project on Lark Drive
+> *"Agent, initialize all 8 project docs on Lark Drive."*  
+*(Or give a folder name/link: "Agent, initialize docs in my Lark folder 'Shiori Docs' or folder URL...")*
+- **What Agent Does**: 
+  - If a folder URL/name is provided: Automatically searches for the folder token using `lark-cli drive +search` or parses the URL.
+  - If no folder is provided: Runs `node scripts/sync.js --init` to **automatically create a new folder** on your Lark Drive, creates all 8 standard documents inside it, and saves the document IDs to `docs/doc-mapping.json`.
+  - If OAuth scope approval is needed, presents a verification QR code and login link for one-click confirmation.
 
 
----
 
-### 2. Update & Synchronize Documentation
-When updating local Markdown files in `./docs/`:
+### 📝 Write or Update Technical Documentation
+> *"Agent, write the Product Requirements Document (PRD) for my new project in `docs/01-prd.md` and sync it to Lark."*
+- **What Agent Does**: Fills out `docs/01-prd.md` following standard templates, updates metadata (`Version`, `Last Updated`), and syncs changes to Lark Docs.
 
-```bash
-# Sync all modified documents to Lark Docs (overwrite in place)
-npm run sync
+### 🎨 Draw Architecture & ERD Diagrams
+> *"Agent, draw the System Architecture diagram and Database ERD using Draw.io MCP, export PNG Retina 2x, and update `docs/02-system-architecture.md` and `docs/03-database-design.md`."*
+- **What Agent Does**: Uses `drawio` MCP tools to generate XML definitions in `docs/diagrams/`, applies the **Aesthetic Design System** (`classDef` color coding per layer, rounded corners `rx=10, ry=10`), compiles SVG & PNG Retina 2x via `npm run export-diagrams`, embeds interactive edit links, and syncs image blocks in-place on Lark Docs.
 
-# Or sync a single document (e.g., PRD)
-node scripts/sync.js --doc 01-prd
-```
-
----
-
-### 3. Draw & Export Diagrams
-1. Create/edit diagrams in `docs/diagrams/<name>.drawio` using Draw.io MCP.
-2. Batch export all diagrams to SVG and PNG Retina 2x:
-```bash
-npm run export-diagrams
-# Or: node scripts/export-diagrams.js
-```
-3. Embedded format in Markdown:
-```markdown
-![System Architecture](./diagrams/system-architecture.png)
-[✏️ Edit Diagram in Draw.io](https://app.diagrams.net/?url=https://raw.githubusercontent.com/<org>/<repo>/main/docs/diagrams/system-architecture.drawio)
-```
+### 🔄 Sync All Documentation Changes
+> *"Agent, sync all modified documentation files and diagrams to Lark Docs."*
+- **What Agent Does**: Executes `npm run sync` to overwrite update all local Markdown files to their corresponding Lark Docs without creating duplicate files.
 
 ---
 
-## 🛠️ Lark CLI Command Reference
+## 📂 Repository Structure & Agent Kit Sitemap
 
-For raw Lark CLI operations, refer to [`.agents/skills/lark-docs/SKILL.md`](./.agents/skills/lark-docs/SKILL.md):
-
-| Category | CLI Command Syntax | Description |
-| :--- | :--- | :--- |
-| **Content Update** | `npx lark-cli docs +update --doc <DOC_ID> --command overwrite --doc-format markdown --content @<PATH>` | Overwrite document content in place |
-| **Content Create** | `npx lark-cli docs +create --folder-token <FOLDER_ID> --doc-format markdown --content @<PATH>` | Create new document in folder |
-| **Media Upload** | `npx lark-cli docs +media-insert --doc <DOC_ID> --file <PATH> --type image` | Embed image into document |
-| **Permissions** | `npx lark-cli drive +member-add --token <DOC_ID> --member-type email --member-id user@company.com --perm edit` | Grant access permission |
+```
+lark-docs-kit/
+├── .agents/                      # AI Agent Customizations & Kit
+│   ├── rules/                    # Core Agent Execution Rules
+│   │   ├── primary-workflow.md   # 4-Phase Agent Execution Algorithm
+│   │   ├── documentation-management.md # 8-Doc architecture & sync rules
+│   │   └── development-rules.md  # Zero-hallucination & verification rules
+│   ├── skills/                   # Domain Skills for AI Agents
+│   │   ├── lark-docs/SKILL.md    # Lark CLI & sync skill reference
+│   │   ├── drawio-diagrams/SKILL.md # Draw.io MCP & diagram export skill
+│   │   └── aesthetic/SKILL.md    # Aesthetic UI/UX & diagram design guidelines
+│   └── workflows/                # Executable Agent Workflows
+│       ├── sync-docs.md          # Doc synchronization workflow
+│       ├── draw-diagram.md       # Diagram creation & export workflow
+│       └── use-mcp.md            # MCP tool execution workflow
+├── docs/                         # Technical Documentation Source (Markdown)
+│   ├── 01-prd.md                 # Product Requirements Document — PRD
+│   ├── 02-system-architecture.md # System Architecture & Design
+│   ├── 03-database-design.md     # Database & Data Design
+│   ├── 04-codebase-api-reference.md # Codebase & API Reference
+│   ├── 05-development-standards.md # Development & Code Standards
+│   ├── 06-ui-ux-design-system.md # UI/UX & Design System
+│   ├── 07-testing-deployment.md # Testing & Deployment
+│   ├── 08-project-roadmap.md     # Project Roadmap & Management
+│   ├── doc-mapping.json          # Centralized Lark Document ID mapping
+│   └── diagrams/                 # Draw.io source files (.drawio, .drawio.svg, .png)
+├── scripts/                      # Automated Engines for Agents
+│   ├── sync.js                   # Node.js sync engine for Lark Docs
+│   └── export-diagrams.js        # Node.js export engine for Draw.io diagrams
+├── AGENTS.md                     # Agent workspace guidance
+└── README.md                     # Project sitemap & prompt guide
+```
