@@ -25,7 +25,37 @@ Below is a complete 100% reference table for interacting with Lark Docs via Lark
 
 ---
 
+### 🔐 OAUTH DEVICE LOGIN & SCOPE APPROVAL PROTOCOL (CRITICAL FOR AGENTS)
+
+When performing Drive operations (creating folders, moving files, granting permissions) that require new OAuth scopes (`docx:document:create`, `space:document:move`, `drive:drive`), `lark-cli` will initiate a Device Flow authorization. The Agent MUST follow this protocol:
+
+1. **Step 1: Extract Device Code & URL**:
+   Run `npx lark-cli auth login --scope "docx:document:create space:document:move drive:drive" --no-wait --json` to get `verification_url`, `user_code`, and `device_code`.
+
+2. **Step 2: Generate PNG QR Code Image**:
+   Always generate a visual PNG QR code for the user:
+   ```bash
+   npx lark-cli auth qrcode --url "<VERIFICATION_URL>" --output docs/diagrams/lark-qr.png
+   ```
+
+3. **Step 3: Present Link & QR Code to User**:
+   Send a clear message to the user with:
+   - Clickable verification link: `[👉 Click here to authorize Lark Drive permissions](<VERIFICATION_URL>)`
+   - User Code: `user_code`
+   - Embedded QR Code image: `![Lark Drive Authorization QR Code](file:///path/to/docs/diagrams/lark-qr.png)`
+   - Ask user to click **Confirm (Xác nhận)** and reply **"Done" / "Xong"**.
+
+4. **Step 4: Complete Authentication & Resume Task**:
+   When the user confirms authorization, execute:
+   ```bash
+   npx lark-cli auth login --device-code <DEVICE_CODE>
+   ```
+   Then proceed immediately with creating folders/docs and running `node scripts/sync.js --init <FOLDER_TOKEN>`.
+
+---
+
 ### ⚡ AUTOMATION SCRIPTS & DOCUMENT MAPPING (RECOMMENDED FOR AGENTS)
+
 
 Agents operating in this repo MUST prioritize using the automated scripts and JSON mapping:
 

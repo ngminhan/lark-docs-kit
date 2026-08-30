@@ -2,7 +2,7 @@
 Title: Development & Code Standards
 Version: v1.0.0
 Last Updated: 2026-08-28 17:53:37
-Lark Doc ID: UNASSIGNED
+Lark Doc ID: XHGUd3w9Lo5kxsxLI3Tj7rmKpuh
 Status: Draft
 ---
 

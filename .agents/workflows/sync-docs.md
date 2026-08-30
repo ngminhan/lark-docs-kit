@@ -37,10 +37,19 @@ node scripts/sync.js --init <FOLDER_TOKEN>
 ```
 *Creates docs on Lark Drive, automatically extracts returned IDs, and saves them to `docs/doc-mapping.json` & markdown headers.*
 
+#### 🔑 Handling OAuth Scope Approvals (If Folder Creation / Move Requires Permission):
+If Lark CLI requests new OAuth scopes (`docx:document:create`, `space:document:move`, `drive:drive`):
+1. Execute: `npx lark-cli auth login --scope "docx:document:create space:document:move drive:drive" --no-wait --json`
+2. Generate QR code: `npx lark-cli auth qrcode --url "<VERIFICATION_URL>" --output docs/diagrams/lark-qr.png`
+3. Present verification link, user code, and embedded QR code image to user.
+4. After user confirms, resume: `npx lark-cli auth login --device-code <DEVICE_CODE>`
+5. Run: `node scripts/sync.js --init <FOLDER_TOKEN>`
+
 ### C. Update a Single Doc
 ```bash
 node scripts/sync.js --doc 01-prd
 ```
+
 
 ---
 

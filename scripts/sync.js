@@ -2,12 +2,13 @@
 
 /**
  * Script đồng bộ tự động tài liệu Lark Docs từ docs/doc-mapping.json
+ * Tự động tạo Thư mục, upload tiêu đề, và đính kèm sơ đồ Draw.io dạng ảnh trực quan ĐÚNG VỊ TRÍ MỤC.
  * 
  * Cách dùng:
- *  1. Cập nhật tất cả docs cũ đã có ID:
- *     node scripts/sync.js
+ *  1. Cập nhật tất cả docs:
+ *     npm run sync  (hoặc node scripts/sync.js)
  * 
- *  2. Khởi tạo dự án mới trên Lark Drive (tự động tạo doc & lưu ID vào mapping):
+ *  2. Khởi tạo dự án mới vào một Folder cụ thể trên Lark Drive:
  *     node scripts/sync.js --init <FOLDER_TOKEN>
  * 
  *  3. Cập nhật 1 doc cụ thể:
@@ -32,13 +33,13 @@ const isInit = args.includes('--init');
 const folderTokenIdx = args.indexOf('--init') + 1;
 const folderToken = isInit ? args[folderTokenIdx] : null;
 
-const docArgIdx = args.indexOf('--doc') + 1;
-const targetDocKey = args.includes('--doc') ? args[docArgIdx] : null;
-
 if (isInit && (!folderToken || folderToken.startsWith('--'))) {
   console.error('❌ Vui lòng cung cấp FOLDER_TOKEN. Ví dụ: node scripts/sync.js --init fldcnXXXXXXXXX');
   process.exit(1);
 }
+
+const docArgIdx = args.indexOf('--doc') + 1;
+const targetDocKey = args.includes('--doc') ? args[docArgIdx] : null;
 
 console.log('🚀 Bắt đầu tiến trình đồng bộ Lark Docs...\n');
 
@@ -47,50 +48,96 @@ let updatedMapping = false;
 for (const [key, item] of Object.entries(mapping)) {
   if (targetDocKey && key !== targetDocKey) continue;
 
-  const filePath = path.join(__dirname, '..', item.file);
-  if (!fs.existsSync(filePath)) {
+  const relFilePath = item.file; // e.g. "docs/01-prd.md"
+  const absFilePath = path.join(__dirname, '..', item.file);
+
+  if (!fs.existsSync(absFilePath)) {
     console.warn(`⚠️ Bỏ qua ${key}: Không tìm thấy file ${item.file}`);
     continue;
   }
 
-  // Khởi tạo mới nếu chưa có doc_id và đang chạy --init
-  if (isInit && !item.doc_id) {
-    console.log(`📝 [Tạo mới] ${item.title} -> Folder: ${folderToken}`);
+  const docTitle = item.title;
+
+  // 1. Khởi tạo mới nếu chưa có doc_id
+  if (!item.doc_id) {
+    const parentFlag = (folderToken && !folderToken.startsWith('--')) 
+      ? `--parent-token ${folderToken}` 
+      : `--parent-position my_library`;
+
+    console.log(`📝 [Tạo mới] ${docTitle} -> ${parentFlag}`);
     try {
-      const cmd = `npx lark-cli docs +create --folder-token ${folderToken} --doc-format markdown --content @${filePath}`;
+      const cmd = `npx lark-cli docs +create ${parentFlag} --title "${docTitle}" --doc-format markdown --content @${relFilePath}`;
       const output = execSync(cmd, { encoding: 'utf8' });
       
-      // Tìm doc_id / doc_token từ output trả về của lark-cli
-      const match = output.match(/(doccn[a-zA-Z0-9]+|docx[a-zA-Z0-9]+)/);
-      if (match) {
-        const newDocId = match[0];
+      let newDocId = null;
+      try {
+        const jsonRes = JSON.parse(output);
+        newDocId = jsonRes?.data?.document?.document_id || jsonRes?.data?.document_id;
+      } catch (e) {}
+
+      if (!newDocId) {
+        const match = output.match(/("document_id"|"doc_id"|"token"|document_id:)\s*:\s*"([^"]+)"/) || output.match(/(doccn[a-zA-Z0-9]+|docx[a-zA-Z0-9]+|[a-zA-Z0-9_-]{20,})/);
+        if (match) newDocId = match[2] || match[1];
+      }
+
+      if (newDocId) {
         item.doc_id = newDocId;
         updatedMapping = true;
         console.log(`   ✅ Đã tạo thành công! Lark Doc ID: ${newDocId}`);
 
-        // Cập nhật Lark Doc ID vào header file markdown
-        let content = fs.readFileSync(filePath, 'utf8');
+        let content = fs.readFileSync(absFilePath, 'utf8');
         content = content.replace(/Lark Doc ID: .*/, `Lark Doc ID: ${newDocId}`);
-        fs.writeFileSync(filePath, content, 'utf8');
+        fs.writeFileSync(absFilePath, content, 'utf8');
       } else {
         console.log(`   ⚠️ Tạo thành công nhưng không tự động bóc tách được ID. Output:\n${output}`);
       }
     } catch (err) {
       console.error(`   ❌ Lỗi tạo mới ${key}:`, err.message);
     }
-  } 
-  // Cập nhật doc cũ đã có doc_id
-  else if (item.doc_id) {
-    console.log(`🔄 [Cập nhật] ${item.title} (ID: ${item.doc_id})`);
+  }
+
+  // 2. Cập nhật doc đã có doc_id
+  if (item.doc_id) {
+    console.log(`🔄 [Cập nhật] ${docTitle} (ID: ${item.doc_id})`);
     try {
-      const cmd = `npx lark-cli docs +update --doc ${item.doc_id} --command overwrite --doc-format markdown --content @${filePath}`;
-      execSync(cmd, { stdio: 'inherit' });
-      console.log(`   ✅ Cập nhật thành công!`);
+      // a. Cập nhật tiêu đề trên Lark Drive
+      try {
+        execSync(`npx lark-cli drive +update-title --token ${item.doc_id} --type docx --title "${docTitle}"`, { stdio: 'pipe' });
+      } catch (e) {}
+
+      // b. Ghi đè nội dung Markdown (dùng relative path @relFilePath)
+      const cmd = `npx lark-cli docs +update --doc ${item.doc_id} --command overwrite --doc-format markdown --content @${relFilePath}`;
+      execSync(cmd, { stdio: 'pipe' });
+      console.log(`   ✅ Cập nhật văn bản Markdown thành công!`);
+
+      // c. Tự động chèn sơ đồ Draw.io (.png) ĐÚNG VỊ TRÍ MỤC bằng cách match chính xác link ".drawio"
+      const markdownContent = fs.readFileSync(absFilePath, 'utf8');
+      const imgRegex = /!\[(.*?)\]\(\.\/diagrams\/(.*?\.png)\)/g;
+      let match;
+      while ((match = imgRegex.exec(markdownContent)) !== null) {
+        const altText = match[1] || 'Draw.io Diagram';
+        const imgFileName = match[2];
+        const drawioFileName = imgFileName.replace('.png', '.drawio');
+        const relImgPath = `docs/diagrams/${imgFileName}`;
+        const absImgPath = path.join(__dirname, '..', relImgPath);
+
+        if (fs.existsSync(absImgPath)) {
+          console.log(`   🖼️ Đang chèn Sơ đồ Draw.io vào ĐÚNG VỊ TRÍ: ${relImgPath}...`);
+          try {
+            // Định vị chính xác block chứa link drawio trong phần đó và chèn ảnh ngay trước link
+            const insertCmd = `npx lark-cli docs +media-insert --doc ${item.doc_id} --file "${relImgPath}" --type image --caption "${altText}" --selection-with-ellipsis "${drawioFileName}" --before`;
+            execSync(insertCmd, { stdio: 'pipe' });
+            console.log(`      ✅ Đã chèn sơ đồ ${imgFileName} đúng vị trí thành công!`);
+          } catch (insertErr) {
+            console.warn(`      ⚠️ Không thể định vị chèn ảnh ${imgFileName}: ${insertErr.message}`);
+          }
+        }
+      }
     } catch (err) {
       console.error(`   ❌ Lỗi cập nhật ${key}:`, err.message);
     }
   } else {
-    console.log(`⏭️ [Bỏ qua] ${item.title}: Chưa có doc_id. Dùng '--init <FOLDER_TOKEN>' để khởi tạo mới.`);
+    console.log(`⏭️ [Bỏ qua] ${docTitle}: Chưa có doc_id. Dùng '--init <FOLDER_TOKEN>' để khởi tạo mới.`);
   }
 }
 

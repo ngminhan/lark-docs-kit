@@ -1,42 +1,42 @@
 {
   "01-prd": {
     "file": "docs/01-prd.md",
-    "title": "Product Requirements Document — PRD",
+    "title": "01. Product Requirements Document — PRD",
     "doc_id": ""
   },
   "02-system-architecture": {
     "file": "docs/02-system-architecture.md",
-    "title": "System Architecture & Design",
+    "title": "02. System Architecture & Design",
     "doc_id": ""
   },
   "03-database-design": {
     "file": "docs/03-database-design.md",
-    "title": "Database & Data Design",
+    "title": "03. Database & Data Design",
     "doc_id": ""
   },
   "04-codebase-api-reference": {
     "file": "docs/04-codebase-api-reference.md",
-    "title": "Codebase & API Reference",
+    "title": "04. Codebase & API Reference",
     "doc_id": ""
   },
   "05-development-standards": {
     "file": "docs/05-development-standards.md",
-    "title": "Development & Code Standards",
+    "title": "05. Development & Code Standards",
     "doc_id": ""
   },
   "06-ui-ux-design-system": {
     "file": "docs/06-ui-ux-design-system.md",
-    "title": "UI/UX & Design System",
+    "title": "06. UI/UX & Design System",
     "doc_id": ""
   },
   "07-testing-deployment": {
     "file": "docs/07-testing-deployment.md",
-    "title": "Testing & Deployment",
+    "title": "07. Testing & Deployment",
     "doc_id": ""
   },
   "08-project-roadmap": {
     "file": "docs/08-project-roadmap.md",
-    "title": "Project Roadmap & Management",
+    "title": "08. Project Roadmap & Management",
     "doc_id": ""
   }
 }

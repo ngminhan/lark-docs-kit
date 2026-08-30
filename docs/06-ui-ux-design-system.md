@@ -2,7 +2,7 @@
 Title: UI/UX & Design System
 Version: v1.0.0
 Last Updated: 2026-08-28 17:53:37
-Lark Doc ID: UNASSIGNED
+Lark Doc ID: Ke0Bd1TT1oIbkAxVwC0jcH1ip3g
 Status: Draft
 ---
 

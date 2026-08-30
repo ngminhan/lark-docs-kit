@@ -12,12 +12,15 @@ This skill provides step-by-step instructions for creating, editing, exporting, 
 
 ## 1. Core Principles & Guidelines
 
-1. **Empirical Accuracy**: Diagrams MUST be strictly derived from verified codebase, database schemas, and documentation. **NEVER** invent or hallucinate unrelated components.
-2. **Tooling Integration**: Always use the `drawio` MCP server (`open_drawio_xml`, `open_drawio_mermaid`, `open_drawio_csv`, `set_page`, `get_page`) to generate diagram definitions.
-3. **Format Standard**:
+1. **STRICT NO ASCII DIAGRAMS**: NEVER create diagrams using ASCII text blocks or code blocks (`+---+`, `[A] -> [B]`). EVERY diagram MUST be drawn using Draw.io MCP and saved as a `.drawio` file.
+2. **IMMEDIATE AUTOMATED SYNC**: Immediately after creating or modifying any diagram, you MUST compile the images (`npm run export-diagrams`) and sync to Lark Docs (`npm run sync`) without waiting.
+3. **Empirical Accuracy**: Diagrams MUST be strictly derived from verified codebase, database schemas, and documentation. **NEVER** invent or hallucinate unrelated components.
+4. **Tooling Integration**: Always use the `drawio` MCP server (`open_drawio_xml`, `open_drawio_mermaid`, `open_drawio_csv`, `set_page`, `get_page`) to generate diagram definitions.
+5. **Format Standard**:
    - Source definition file: `docs/diagrams/<name>.drawio`
    - Rendered SVG (for Git repository): `docs/diagrams/<name>.drawio.svg`
    - Rendered PNG Retina 2x (for Lark Docs import): `docs/diagrams/<name>.png`
+
 
 ---
 
