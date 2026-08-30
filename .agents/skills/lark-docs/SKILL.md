@@ -25,6 +25,32 @@ Below is a complete 100% reference table for interacting with Lark Docs via Lark
 
 ---
 
+### ⚡ AUTOMATION SCRIPTS & DOCUMENT MAPPING (RECOMMENDED FOR AGENTS)
+
+Agents operating in this repo MUST prioritize using the automated scripts and JSON mapping:
+
+1. **Central Document Mapping**: [`docs/doc-mapping.json`](file:///Users/nguyenminhan/Desktop/GitHub/lark-docs-kit/docs/doc-mapping.json)
+2. **Automated Lark Sync**:
+   ```bash
+   # Sync all modified documents to Lark Docs (overwrite update)
+   npm run sync
+   # Or: node scripts/sync.js
+
+   # Initialize new project on Lark Drive (creates docs & saves IDs automatically)
+   node scripts/sync.js --init <FOLDER_TOKEN>
+
+   # Sync a single specific document
+   node scripts/sync.js --doc 01-prd
+   ```
+3. **Automated Diagram Export**:
+   ```bash
+   # Batch compile all .drawio files to SVG and PNG Retina 2x
+   npm run export-diagrams
+   # Or: bash scripts/export-diagrams.sh
+   ```
+
+---
+
 ### 📝 GROUP 1: Content Editing & Management (CRUD)
 
 | CLI Command | Full Syntax | Primary Purpose & Parameters |

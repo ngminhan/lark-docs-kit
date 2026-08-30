@@ -28,9 +28,15 @@ Use `drawio` MCP tools to create or update diagram definitions in XML format:
 - Call `open_drawio_mermaid` or `open_drawio_xml` to construct the diagram tree.
 - Save the resulting file as `docs/diagrams/<name>.drawio`.
 
-### Step 2: Headless Export via `drawio-cli`
-Run the following commands using the Puppeteer-powered headless engine:
+### Step 2: Automated Batch Export (Recommended)
+Run the automated script to compile all `.drawio` files to SVG and PNG Retina 2x:
 
+```bash
+npm run export-diagrams
+# Or: bash scripts/export-diagrams.sh
+```
+
+### Alternative: Single File Export via `drawio-cli`
 ```bash
 # 1. Export SVG for repository documentation
 npx -y drawio-cli -x -f svg -o docs/diagrams/<name>.drawio.svg docs/diagrams/<name>.drawio

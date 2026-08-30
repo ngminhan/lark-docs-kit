@@ -1,0 +1,19 @@
+{
+  "name": "lark-docs-kit",
+  "version": "1.0.0",
+  "description": "System for managing technical documentation and Draw.io diagrams synced with Lark Docs via Lark CLI",
+  "main": "scripts/sync.js",
+  "scripts": {
+    "sync": "node scripts/sync.js",
+    "sync:init": "node scripts/sync.js --init",
+    "export-diagrams": "bash scripts/export-diagrams.sh"
+  },
+  "keywords": [
+    "lark-docs",
+    "lark-cli",
+    "drawio",
+    "documentation"
+  ],
+  "author": "",
+  "license": "ISC"
+}

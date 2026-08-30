@@ -23,20 +23,35 @@ Follow this workflow to update local documentation in `./docs/` and synchronize 
 2. Update timestamp using `date "+%Y-%m-%d %H:%M:%S"`.
 3. Add changelog entry in the document section.
 
-## Step 3: Synchronize via Lark CLI
+## Step 3: Synchronize via Automated Script (Recommended)
 
-### Case A: Document Already Exists (Has `Lark Doc ID`)
-Execute direct overwrite update:
+### A. Update All Existing Docs
+```bash
+npm run sync
+# Or: node scripts/sync.js
+```
+
+### B. Initialize New Project on Lark Drive
+```bash
+node scripts/sync.js --init <FOLDER_TOKEN>
+```
+*Creates docs on Lark Drive, automatically extracts returned IDs, and saves them to `docs/doc-mapping.json` & markdown headers.*
+
+### C. Update a Single Doc
+```bash
+node scripts/sync.js --doc 01-prd
+```
+
+---
+
+## Step 4: Direct CLI Commands (Alternative)
+
+### Update Existing Doc
 ```bash
 npx lark-cli docs +update --doc <DOCUMENT_ID> --command overwrite --doc-format markdown --content @./docs/<FILENAME>.md
 ```
 
-### Case B: Document Does Not Exist Yet (No `Lark Doc ID`)
-Execute document creation:
+### Create New Doc
 ```bash
 npx lark-cli docs +create --folder-token <FOLDER_ID> --doc-format markdown --content @./docs/<FILENAME>.md
 ```
-Save returned document ID to `Lark Doc ID` in `./docs/<FILENAME>.md`.
-
-## Step 4: Verification
-Confirm sync success output from Lark CLI.
